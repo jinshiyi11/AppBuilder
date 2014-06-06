@@ -157,7 +157,7 @@ def backupFiles():
         print "channel:"+info.channel
         shutil.copy(info.appRootDir+"/bin/"+info.productName+"-release.apk",info.getBackupDir()+info.productName+"_"+info.channel+".apk")
     else:
-        shutil.copy(info.appRootDir+"/bin/"+info.productName+"-release.apk",info.getBackupDir()+info.productName+"_v"+info.getProductVersion()+".apk")
+        shutil.copy(info.appRootDir+"/bin/"+info.productName+"-release.apk",info.getBackupDir()+info.productName+".apk")
 
     if os.path.exists(info.appRootDir+"/bin/proguard"):
         shutil.copytree(info.appRootDir+"/bin/proguard",info.getBackupDir()+"proguard")
