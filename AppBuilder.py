@@ -103,7 +103,7 @@ def initVersion():
     #TODO:save xml
     #更新AndroidManifest.xml文件的versionName字段
     xmlRoot.set("{http://schemas.android.com/apk/res/android}versionName",info.getProductVersion())
-    xmlRoot.set("{http://schemas.android.com/apk/res/android}versionCode",""+versionCode)
+    xmlRoot.set("{http://schemas.android.com/apk/res/android}versionCode",str(versionCode))
     #更新AndroidManifest.xml文件的UMENG_CHANNEL字段，用于统计安装渠道
     # if info.isYoumengChannel:
         # print "using Youmeng channel"
@@ -173,7 +173,7 @@ if __name__ == '__main__':
                         , help='app根目录，该目录即AndroidManifest.xml文件所在目录,没指定就使用当前目录')
     parser.add_argument('-u', dest='updateVersion',action='store_true'
                         , help='是否更新版本号，即更新AndroidManifest.xml文件中的android:versionName字段')
-    parser.add_argument('-c', dest='channel', required=True
+    parser.add_argument('-c', dest='channel', required=False
                         , help='渠道号')
 
     args = parser.parse_args()
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     if args.appRootDir:
         #是否是相对路径
         if args.appRootDir[0]=='.':
-            info.appRootDir=os.getcwd()+args.appRootDir[1:]
+            info.appRootDir=os.getcwd()+'/'+args.appRootDir
         else:
             info.appRootDir=args.appRootDir
         os.chdir(info.appRootDir)

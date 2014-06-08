@@ -27,14 +27,21 @@ KEY_PASS=""
 #证书aliasname
 ALIAS_NAME=""
 #需要生成渠道包的apk包的备份路径
-BACKUP_DIR="../"
+BACKUP_DIR="E:/backup/"
 #将生成的apk渠道包放到zip文件中，该zip文件所在的目录
 ZIP_DIR=""
 
-#渠道格式
-#"渠道id":["渠道名",生成的文件名是否带上渠道id,生成的文件名是否带上版本号]
-#CHANNELS={}
-ChannelInfo=""
+CHANNELS=["wandoujia"       #豌豆荚
+          ,"360"            #360
+          ,"yingyongbao"    #应用宝
+          ,"baidu"          #百度
+          ,"91"             #91
+          ,"sougou"         #搜狗
+          ,"mumayi"         #木蚂蚁         
+          ,"anzhi"          #安智
+          ,"yingyonghui"    #应用汇
+          ,"zhihuiyun"      #智汇云
+        ]
 
 def loadSignKey(productName):
     '''
@@ -50,15 +57,8 @@ def loadSignKey(productName):
     KEY_PASS=keyInfo.KEY_PASS
     ALIAS_NAME=keyInfo.ALIAS_NAME
     
-    
-def loadChannels(productName):
-    global ChannelInfo
-    
-    filepath=os.path.split(sys.argv[0])[0]+"/"+productName+"_channels.py"
-    ChannelInfo=Util.load_module(filepath)
-     
-
-def makeChannelApk(baseApkFilePath,productName,channel,version):
+        
+def makeChannelApk(baseApkFilePath,channel):
     #如果目标文件已存在则跳过
     backupDir,baseApkName=os.path.split(baseApkFilePath)
     baseApkName,extension=os.path.splitext(baseApkName)
@@ -66,13 +66,11 @@ def makeChannelApk(baseApkFilePath,productName,channel,version):
     #纯数字的渠道号需要统一在后面加上个字符'c',防止读取纯数字的MetaData出错
     if channel.isdigit():
         channel = 'c' + channel
-    destApkFileName=ChannelInfo.getDestApkFileName(productName,channel,version)
-    destApkFilePath=backupDir+"/"+destApkFileName
+    destApkFilePath=backupDir+"/"+baseApkName+"_"+channel+".apk"
     print "正在生成渠道包："+channel
     
-    print "渠道包路径:"+destApkFilePath
     if not os.path.exists(destApkFilePath):
-        SingleChannelPacker.makeChannelApk(baseApkFilePath,destApkFileName,channel,KEY_STORE_FILE_PATH,STORE_PASS,KEY_PASS,ALIAS_NAME)
+        UMengChannelPacker.makeChannelApk(baseApkFilePath,channel,KEY_STORE_FILE_PATH,STORE_PASS,KEY_PASS,ALIAS_NAME)
     else:
         print "渠道包："+channel+"已存在，跳过该渠道包"
         
@@ -107,10 +105,9 @@ if __name__=='__main__':
     
     BACKUP_DIR=BACKUP_DIR+"backup-"+productName
     loadSignKey(productName)
-    loadChannels(productName)
     
     #
-    baseApkFilePath=BACKUP_DIR+"/"+vers[0]+"."+vers[1]+"."+vers[2]+"/"+version+"/"+productName+"_v"+version+".apk"
+    baseApkFilePath=BACKUP_DIR+"/"+vers[0]+"."+vers[1]+"."+vers[2]+"/"+version+"/"+productName+".apk"
 
     if not os.path.exists(baseApkFilePath):
         sys.exit("apk文件不存在："+baseApkFilePath)
@@ -123,11 +120,11 @@ if __name__=='__main__':
     Util.removeFiles(ZIP_DIR, "zip")
     
     if channel:
-        makeChannelApk(baseApkFilePath,productName,channel,version)
+        makeChannelApk(baseApkFilePath,channel)
     else:
         #如果未指定渠道号就打出指定version的所有渠道包
-        for channel in ChannelInfo.CHANNELS.keys():
-            makeChannelApk(baseApkFilePath,productName,channel,version)
+        for channel in CHANNELS[:]:
+            makeChannelApk(baseApkFilePath,channel)
             
     
     #Util.zipApkFiles(backupDir, backupDir+"/bundles/bundles.zip")
