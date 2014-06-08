@@ -171,7 +171,7 @@ if __name__ == '__main__':
                         , help='项目名称，如:browser')
     parser.add_argument('-d', dest='appRootDir'
                         , help='app根目录，该目录即AndroidManifest.xml文件所在目录,没指定就使用当前目录')
-    parser.add_argument('-u', dest='updateVersion',action='store_true'
+    parser.add_argument('-u', dest='updateVersion',action='store_true',default=True
                         , help='是否更新版本号，即更新AndroidManifest.xml文件中的android:versionName字段')
     parser.add_argument('-c', dest='channel', required=False
                         , help='渠道号')

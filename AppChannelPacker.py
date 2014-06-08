@@ -3,7 +3,7 @@
 import argparse
 import sys
 import shutil 
-import SingleChannelPacker
+import UMengChannelPacker
 import imp
 import os
 import Util
