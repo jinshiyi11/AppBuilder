@@ -5,7 +5,7 @@
 调用方法：
 python <本脚本路径> -f <要修改渠道号的apk包路径> -c <渠道名> -k <证书路径> -s <证书密码storepass> -p <证书密码keypass> -a <证书aliasname>
 如：
-python D:/code/python/UMengChannelPacker.py -f "D:/soft/android/apktool/xxx.apk" -c wandoujia -k "D:/code/android/xxx/doc/sign_key.key" -s xxxx -p xxx -a xxx
+python D:\code\python\renren\UMengChannelPacker.py -f "D:\soft\android\apktool\appcenter.apk" -c wandoujia -k "D:\code\android\appcenter\doc\sign_key.key" -s xxxx -p xxx -a appcenter
 工作流程
 1.通过apktool解apk包
 2.修改AndroidManifest.xml中的UMENG_CHANNEL
@@ -34,7 +34,7 @@ import subprocess
 ##TEMP_DIR='D:/testxxx'
 
 #apktool工具的文件路径,当前目录会被设置为APK_TOOL_PATH所在的目录
-APK_TOOL_PATH='C:/apktool/apktool.bat'
+APK_TOOL_PATH=os.path.split(__file__)[0]+'/apktool/apktool.bat'
 #签名工具的文件路径
 JARSIGNER_PATH='jarsigner.exe'
 #zipalign工具的文件路径
