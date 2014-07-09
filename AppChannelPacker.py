@@ -41,6 +41,7 @@ CHANNELS=["wandoujia"       #豌豆荚
           ,"anzhi"          #安智
           ,"yingyonghui"    #应用汇
           ,"zhihuiyun"      #智汇云
+          ,"renren"         #人人
         ]
 
 def loadSignKey(productName):
