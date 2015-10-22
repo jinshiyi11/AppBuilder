@@ -18,8 +18,9 @@ class BuildInfo(object):
     '''
     productName 产品名根据该字段生成备份路径
     manualVersion AndroidManifest.xml中versionName的前3位版本号(第四位由打包脚本自动生成,表示打包次数)
-    buildCount versionName的第四位版本号(第四位由打包脚本自动生成,表示打包次数)
-    updateVersion 本次编译是否更新第四位版本号,默认为True
+    buildCount 对应versionCount(表示打包次数)
+    autoPartVersion versionName的第四位版本号(第四位由打包脚本自动生成)
+    updateVersion 本次编译是否更新版本号,默认为True
     channel 渠道号，对应AndroidManifest.xml文件中的UMENG_CHANNEL，用于通过友盟统计安装渠道
     '''
     def __init__(self):
@@ -31,11 +32,12 @@ class BuildInfo(object):
         self.updateVersion=True
         self.channel=""
         self.isYoumengChannel=False
+        self.autoPartVersion=1
     
     def getProductVersion(self):
         "返回产品的4位版本号，如1.1.1.1"
-        #return self.manualVersion+"."+str(self.buildCount)
-        return "%s.%04d" % (self.manualVersion,self.buildCount)
+        #return self.manualVersion+"."+str(self.autoPartVersion)
+        return "%s.%04d" % (self.manualVersion,self.autoPartVersion)
         
     def getProductBackupDir(self):
         "z:/backup-xxx/"
@@ -78,6 +80,7 @@ def initVersion():
         #创建buildCount文件
         f=open(buildCountFilePath,'a+')
         f.write("buildCount="+str(info.buildCount))
+        f.write("autoPartVersion="+str(info.autoPartVersion))
         f.close()
     else:
         #读取buildCount文件并更新buildCount
@@ -86,8 +89,10 @@ def initVersion():
         info.buildCount=globalData['buildCount']
         if info.updateVersion:
             info.buildCount=info.buildCount+1
+            info.autoPartVersion=info.autoPartVersion+1
             f=open(buildCountFilePath,'w+')
             f.write("buildCount="+str(info.buildCount))
+            f.write("autoPartVersion="+str(info.autoPartVersion))
             f.close()
         
     #创建当前版本的备份目录
